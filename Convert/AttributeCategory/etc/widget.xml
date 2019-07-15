@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="convert_categories_list" class="Convert\AttributeCategory\Block\Widget\CategoriesList">
+        <label translate="true">Catalog Categories List</label>
+        <description translate="true">List of categories</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" required="false" visible="true">
+                <label translate="true">Title</label>
+            </parameter>
+            <!-- <parameter name="show_categories" xsi:type="multiselect" required="true" visible="true">
+                <label translate="true">Categories to show</label>
+                <options>
+                    <option name="name" value="name">
+                        <label translate="true">Name</label>
+                    </option>
+                    <option name="image" value="image">
+                        <label translate="true">Image</label>
+                    </option>
+                    <option name="price" value="price">
+                        <label translate="true">Price</label>
+                    </option>
+                    <option name="learn_more" value="learn_more">
+                        <label translate="true">Learn More Link</label>
+                    </option>
+                </options>
+            </parameter> -->
+            <parameter name="show_categories" xsi:type="multiselect"  visible="true" sort_order="20"
+             source_model="Convert\AttributeCategory\Model\Source\Categorylist">
+				<label translate="true">Categories to show</label>
+			</parameter>
+        </parameters>
+    </widget>
+</widgets>
