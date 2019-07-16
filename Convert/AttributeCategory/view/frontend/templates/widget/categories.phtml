@@ -1,0 +1,40 @@
+<?php 
+    $list_data = $this->getData("arr_categories");
+    $list_ids = $this->filterParameters();
+   // var_dump($list_ids);
+?>
+
+<div class="box-categories">
+    <h2 class="title-box-categories">
+        <?= $this->getData("title"); ?>
+    </h2>
+
+    <?php 
+   
+    foreach($list_data as $cat):
+        // echo "<pre>";
+        // print_r($cat->getData());
+        // echo "</pre>";
+       
+        // $objectHelper = $this->Helper('Convert\AttributeCategory\Helper\Data');
+        // $category = $objectHelper->getLoadCategory($cat->getId());
+        // var_dump($category);
+
+        $img =  $this->getLoadImg($cat->getId());
+
+        if(!$img){
+                
+        }
+    ?>  
+        
+        <div class='citem'>
+        <a href="<?= $cat->getUrl() ?>" class="img">
+            <img src="<?= $img ?>" alt="">
+        </a>
+        <h3 class="name"><a href="<?= $cat->getUrl() ?>">
+                <?= $cat->getName() ?>
+        </a></h3>
+        </div>
+        
+    <?php endforeach ?>
+</div>

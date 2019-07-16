@@ -26,7 +26,7 @@
                 </options>
             </parameter> -->
             <parameter name="show_categories" xsi:type="multiselect"  visible="true" sort_order="20"
-             source_model="Convert\AttributeCategory\Model\Source\Categorylist">
+             source_model="Convert\AttributeCategory\Model\Source\CategoryList">
 				<label translate="true">Categories to show</label>
 			</parameter>
         </parameters>

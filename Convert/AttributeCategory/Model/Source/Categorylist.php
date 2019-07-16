@@ -2,14 +2,19 @@
 
 namespace Convert\AttributeCategory\Model\Source;
 
-class Categorylist implements \Magento\Framework\Option\ArrayInterface
+class CategoryList implements \Magento\Framework\Option\ArrayInterface
 {
-    protected  $_group;
+
+    protected $_categoryCollection;
+    protected $_storeManager;
 
     public function __construct(
-        \Rokanthemes\Brand\Model\Group $group
-        ) {
-        $this->_group = $group;
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
+        array $data = []
+    ) {
+        $this->_categoryCollection = $categoryCollection;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -17,15 +22,36 @@ class Categorylist implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
+    // public function toOptionArray()
+    // {
+    //     return array(
+    //         array(
+    //             'value' => 0,
+    //             'label' => 'No consent',
+    //         ),
+    //         array(
+    //             'value' => 1,
+    //             'label' => 'Require consent',
+    //         ),
+    //         array(
+    //             'value' => 2,
+    //             'label' => 'Require consent in EU only',
+    //         ),
+    //     );
+    // }
     public function toOptionArray()
     {
-        $groups = $this->_group->getCollection()
-        ->addFieldToFilter('status', '1');
-        $groupList = array();
-        foreach ($groups as $group) {
-            $groupList[] = array('label' => $group->getName(),
-                'value' => $group->getId());
+        $categories = $this->_categoryCollection->create()
+            ->addAttributeToSelect('*')
+            ->setStore($this->_storeManager->getStore())
+            ->addAttributeToFilter('is_active','1');
+
+        $catList = array();
+        // var_dump($categories);
+        foreach ($categories as $cat) {
+            $catList[] = array('label' => $cat->getName(),
+                'value' => $cat->getId());
         }
-        return $groupList;
+        return $catList;
     }
 }
