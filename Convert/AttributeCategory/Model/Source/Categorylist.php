@@ -51,7 +51,17 @@ class CategoryList implements \Magento\Framework\Option\ArrayInterface
         foreach ($categories as $cat) {
             $catList[] = array('label' => $cat->getName(),
                 'value' => $cat->getId());
-        }
+        }   
         return $catList;
+    }
+    public function sortMenu($mnList,$parent_id){
+        $menuTree = array();
+        foreach ($mnList as $cat) {
+            if($cat->getParentId() == $parent_id){
+                $menuTree[] = $cat;
+                $child = sortMenu($mnList,$cat->getId());
+            }
+        }
+        return $menuTree;
     }
 }

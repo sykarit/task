@@ -7,6 +7,8 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Catalog\Setup\CategorySetupFactory;
+use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 
 /**
  * @codeCoverageIgnore
@@ -19,19 +21,32 @@ class InstallData implements InstallDataInterface
      * @var EavSetupFactory
      */
     private $_eavSetupFactory;
+     /**
+     * Category setup factory.
+     *
+     * @var CategorySetupFactory
+     */
     protected $categorySetupFactory;
-
+    
+    /**
+     * EAV setup factory.
+     *
+     * @var CategorySetupFactory
+     */
     /**
      * Init.
      *
      * @param EavSetupFactory $eavSetupFactory
+     * @param CategorySetupFactory $categorySetupFactory
      */
-    public function __construct(EavSetupFactory $eavSetupFactory, \Magento\Catalog\Setup\CategorySetupFactory $categorySetupFactory)
+    public function __construct(
+        EavSetupFactory $eavSetupFactory,
+        CategorySetupFactory $categorySetupFactory
+    )
     {
         $this->_eavSetupFactory = $eavSetupFactory;
         $this->categorySetupFactory = $categorySetupFactory;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -41,9 +56,12 @@ class InstallData implements InstallDataInterface
         ModuleDataSetupInterface $setup,
         ModuleContextInterface $context
     ) {
-        /** @var EavSetup $eavSetup */
+        /** 
+         * @var EavSetup $eavSetup
+         * @var CategorySetup $setup
+        */
         $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);
-        $setup = $this->categorySetupFactory->create(['setup' => $setup]);         
+        $setup = $this->categorySetupFactory->create(['setup' => $setup]);
         $setup->addAttribute(
             \Magento\Catalog\Model\Category::ENTITY, 'thumbnai', [
                 'type' => 'varchar',
@@ -52,7 +70,19 @@ class InstallData implements InstallDataInterface
                 'backend' => 'Magento\Catalog\Model\Category\Attribute\Backend\Image',
                 'required' => false,
                 'sort_order' => 9,
-                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'group' => 'General Information',
+            ]
+        )
+        ->addAttribute(
+            \Magento\Catalog\Model\Category::ENTITY, 'is_landing', [
+                'type' => 'int',
+                'label' => 'Is Landing',
+                'input' => 'select',
+                'source' => Boolean::class,
+                'default'  => '0',
+                'sort_order' => 3,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
                 'group' => 'General Information',
             ]
         );
